@@ -71,13 +71,13 @@ class Unbalanced():
             X = df.values[:, :-1]
             y = df.values[:, -1].astype(int)
             if debug:
-                print('Original dataset shape %s' % Counter(y))
+                print('Random Oversampling: Original dataset shape %s' % Counter(y))
             ros = RandomOverSampler(random_state=0)
             X_res, y_res = ros.fit_resample(X, y)
             df_resampled = pd.DataFrame(X_res, columns=df.columns[:-1])
             df_resampled.insert(len(df_resampled.columns), df.columns[-1], y_res)
             if debug:
-                print('Resampled dataset shape %s' % Counter(y_res))
+                print('Random Oversampling: Resampled dataset shape %s' % Counter(y_res))
             return df_resampled
 
 
@@ -91,26 +91,26 @@ class Unbalanced():
             X = df.values[:, :-1]
             y = df.values[:, -1].astype(int)
             if debug:
-                print('Original dataset shape %s' % Counter(y))
+                print('NearMiss: Original dataset shape %s' % Counter(y))
             nm = NearMiss(random_state=0, version=variant)
             X_res, y_res = nm.fit_resample(X, y)
             df_resampled = pd.DataFrame(X_res, columns=df.columns[:-1])
             df_resampled.insert(len(df_resampled.columns), df.columns[-1], y_res)
             if debug:
-                print('Resampled dataset shape %s' % Counter(y_res))
+                print('NearMiss: Resampled dataset shape %s' % Counter(y_res))
             return df_resampled
         ###########################################################################################################
         def ENN(df, debug=True):
             X = df.values[:, :-1]
             y = df.values[:, -1].astype(int)
             if debug:
-                print('Original dataset shape %s' % Counter(y))
+                print('ENN: Original dataset shape %s' % Counter(y))
             enn = EditedNearestNeighbours(sampling_strategy="auto")
             X_res, y_res = enn.fit_resample(X, y)
             df_resampled = pd.DataFrame(X_res, columns=df.columns[:-1])
             df_resampled.insert(len(df_resampled.columns), df.columns[-1], y_res)
             if debug:
-                print('Resampled dataset shape %s' % Counter(y_res))
+                print('ENN: Resampled dataset shape %s' % Counter(y_res))
             return df_resampled
         ###########################################################################################################
         """
@@ -120,13 +120,13 @@ class Unbalanced():
             X = df.values[:, :-1]
             y = df.values[:, -1].astype(int)
             if debug:
-                print('Original dataset shape %s' % Counter(y))
+                print('Tomeks_Link: Original dataset shape %s' % Counter(y))
             tl = TomekLinks()
             X_res, y_res = tl.fit_resample(X, y)
             df_resampled = pd.DataFrame(X_res, columns=df.columns[:-1])
             df_resampled.insert(len(df_resampled.columns), df.columns[-1], y_res)
             if debug:
-                print('Resampled dataset shape %s' % Counter(y_res))
+                print('Tomeks_Link: Resampled dataset shape %s' % Counter(y_res))
             return df_resampled
         ###########################################################################################################
         """
@@ -136,11 +136,11 @@ class Unbalanced():
             X = df.values[:, :-1]
             y = df.values[:, -1].astype(int)
             if debug:
-                print('Original dataset shape %s' % Counter(y))
+                print('Random undersampling: Original dataset shape %s' % Counter(y))
             rus = RandomUnderSampler(random_state=0)
             X_res, y_res = rus.fit_resample(X, y)
             df_resampled = pd.DataFrame(X_res, columns=df.columns[:-1])
             df_resampled.insert(len(df_resampled.columns), df.columns[-1], y_res)
             if debug:
-                print('Resampled dataset shape %s' % Counter(y_res))
+                print('Random undersampling: Resampled dataset shape %s' % Counter(y_res))
             return df_resampled

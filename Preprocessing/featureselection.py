@@ -1,11 +1,14 @@
 import pandas as pd
 from sklearn.decomposition import PCA
 
+from Preprocessing.utils import Utils
+
+
 class FeatureSelection():
 
     @staticmethod
     def get_PCA(df, variance=0.95, debug=True):
-        pca = PCA(n_components=variance)
+        pca = PCA(variance)
         X = df.values[:, :-1]
         pca.fit(X)
         X_reduced = pca.transform(X)
@@ -19,6 +22,7 @@ class FeatureSelection():
 
     @staticmethod
     def get_score_2_features_subset(df):
+
         scores = []
         features = df.columns[:-1]
         y = df.columns[-1]
@@ -33,6 +37,6 @@ class FeatureSelection():
                 i_j_df = pd.DataFrame(data=x_i_j_values)
                 i_j_df.insert(len(i_j_df.columns), df.columns[-1], df.values[:, -1])
 
-                score = automatic_scoring(i_j_df)
+                score = Utils.automatic_scoring(i_j_df)
                 scores.append({"feature_1": i_feature, "feature_2": j_feature, "score": score})
         return scores

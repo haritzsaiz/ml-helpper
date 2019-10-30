@@ -15,7 +15,6 @@ class DataChecking():
         if debug:
             print("DEBUG - Pre action: Variable Count")
             print(df.count())
-
         if action == "remove":
             df.dropna(axis=0, how='any', inplace=True)
         elif action == "impute":
