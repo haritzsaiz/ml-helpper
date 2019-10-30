@@ -193,6 +193,18 @@ df = pd.read_csv("notebooks/Thyroids.csv")
 df_oversampled = Unbalanced.OverSampling.Random(df)
 ```
 
+Hace oversampling con Borderline SMOTE version 1
+```python
+import pandas as pd
+from Preprocessing.unbalnced import Unbalanced
+
+df = pd.read_csv("notebooks/Thyroids.csv")
+#Borderline_SMOTE tiene 2 versiones: variant=1 y varaint=2
+df_ovesampled = Unbalanced.OverSampling.Borderline_SMOTE(df, variant=1)
+```
+
+
+
 
 #### UnderSampling
 
