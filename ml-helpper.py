@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn.impute import SimpleImputer
 
 """
-ALERT = IT MODIFIES THE DF argument (it may drop some rows)
+ALERT = IT MODIFIES THE DF argument (it may drop some rows). It only find NaN values. It wont Drop Nulls
 
 action{remove|impute}
 """
@@ -94,6 +94,7 @@ def treate_outliers(df, action="parallel", debug=True, remove=True):
 
 ########################################################################################################################
 import pandas as pd
+from sklearn.preprocessing import KBinsDiscretizer
 
 """
 KBinsDiscretizer_Instance examples:
@@ -110,14 +111,12 @@ def discretizer(df, KBinsDiscretizer_Instance):
 ########################################################################################################################
 import pandas as pd
 from sklearn.decomposition import PCA
-"""
-PCA_Instance example:
-pca = PCA(n_components=0.99)
-"""
-def get_PCA_from_df(df, PCA_Instance, debug=True):
+
+def get_PCA_from_df(df, variance=0.95, debug=True):
+    pca = PCA(n_components=variance)
     X = df.values[:, :-1]
-    PCA_Instance.fit(X)
-    X_reduced = PCA_Instance.transform(X)
+    pca.fit(X)
+    X_reduced = pca.transform(X)
     num_princiapl_components = X_reduced.shape[1]
     if debug:
         print("DEBUG: " + str(num_princiapl_components) + " princiapl components")
@@ -156,11 +155,197 @@ def automatic_scoring(df):
     summary_score = score.mean()
     return summary_score
 
+########################################################################################################################
+"""
+Links: https://imbalanced-learn.readthedocs.io/en/stable/generated/imblearn.over_sampling.BorderlineSMOTE.html
+"""
+from imblearn.over_sampling import BorderlineSMOTE # doctest: +NORMALIZE_WHITESPACE
+from collections import Counter
+
+def oversample_borderline_SMOTE(df, variant=1, debug=True):
+    X = df.values[:,:-1]
+    y = df.values[:, -1].astype(int)
+    if debug:
+        print('Original dataset shape %s' % Counter(y))
+    if variant == 1:
+        sm = BorderlineSMOTE(random_state=0, kind="borderline-1")
+    else:
+        sm = BorderlineSMOTE(random_state=0, kind="borderline-2")
+
+    X_res, y_res = sm.fit_resample(X, y)
+    df_resampled = pd.DataFrame(X_res, columns=df.columns[:-1])
+    df_resampled.insert(len(df_resampled.columns), df.columns[-1], y_res)
+    if debug:
+        print('Resampled dataset shape %s' % Counter(y_res))
+    return df_resampled
+
+
+########################################################################################################################
+"""
+Link: https://imbalanced-learn.readthedocs.io/en/stable/generated/imblearn.over_sampling.SMOTE.html
+"""
+
+from imblearn.over_sampling import SMOTE # doctest: +NORMALIZE_WHITESPACE
+from collections import Counter
+
+def oversample_SMOTE(df, debug=True):
+    X = df.values[:,:-1]
+    y = df.values[:, -1].astype(int)
+    if debug:
+        print('Original dataset shape %s' % Counter(y))
+    sm = SMOTE(random_state=0)
+    X_res, y_res = sm.fit_resample(X, y)
+    df_resampled = pd.DataFrame(X_res, columns=df.columns[:-1])
+    df_resampled.insert(len(df_resampled.columns), df.columns[-1], y_res)
+    if debug:
+        print('Resampled dataset shape %s' % Counter(y_res))
+    return df_resampled
+
+########################################################################################################################
+from imblearn.over_sampling import ADASYN
+from collections import Counter
+
+def oversample_ADASYN(df, debug=True):
+    X = df.values[:, :-1]
+    y = df.values[:, -1].astype(int)
+    if debug:
+        print('Original dataset shape %s' % Counter(y))
+    ada = ADASYN(random_state=0)
+    X_res, y_res = ada.fit_resample(X, y)
+    df_resampled = pd.DataFrame(X_res, columns=df.columns[:-1])
+    df_resampled.insert(len(df_resampled.columns), df.columns[-1], y_res)
+    if debug:
+        print('Resampled dataset shape %s' % Counter(y_res))
+    return df_resampled
+
+########################################################################################################################
+"""
+Link: https://imbalanced-learn.readthedocs.io/en/stable/generated/imblearn.over_sampling.RandomOverSampler.html
+"""
+from imblearn.over_sampling import RandomOverSampler # doctest: +NORMALIZE_WHITESPACE
+from collections import Counter
+
+def oversample_Random(df, debug=True):
+    X = df.values[:,:-1]
+    y = df.values[:, -1].astype(int)
+    if debug:
+        print('Original dataset shape %s' % Counter(y))
+    ros = RandomOverSampler(random_state=0)
+    X_res, y_res = ros.fit_resample(X, y)
+    df_resampled = pd.DataFrame(X_res, columns=df.columns[:-1])
+    df_resampled.insert(len(df_resampled.columns), df.columns[-1], y_res)
+    if debug:
+        print('Resampled dataset shape %s' % Counter(y_res))
+    return df_resampled
+
+########################################################################################################################
+"""
+Link: https://imbalanced-learn.readthedocs.io/en/stable/generated/imblearn.under_sampling.NearMiss.html
+"""
+
+from imblearn.under_sampling import NearMiss
+from collections import Counter
+
+def undersample_NearMiss(df, variant=2, debug=True):
+    X = df.values[:,:-1]
+    y = df.values[:, -1].astype(int)
+    if debug:
+        print('Original dataset shape %s' % Counter(y))
+    nm = NearMiss(random_state=0, version=variant)
+    X_res, y_res = nm.fit_resample(X, y)
+    df_resampled = pd.DataFrame(X_res, columns=df.columns[:-1])
+    df_resampled.insert(len(df_resampled.columns), df.columns[-1], y_res)
+    if debug:
+        print('Resampled dataset shape %s' % Counter(y_res))
+    return df_resampled
+########################################################################################################################
+from imblearn.under_sampling import EditedNearestNeighbours # doctest: +NORMALIZE_WHITESPACE
+from collections import Counter
+
+def undersample_ENN(df, debug=True):
+    X = df.values[:, :-1]
+    y = df.values[:, -1].astype(int)
+    if debug:
+        print('Original dataset shape %s' % Counter(y))
+    enn = EditedNearestNeighbours(sampling_strategy="auto")
+    X_res, y_res = enn.fit_resample(X, y)
+    df_resampled = pd.DataFrame(X_res, columns=df.columns[:-1])
+    df_resampled.insert(len(df_resampled.columns), df.columns[-1], y_res)
+    if debug:
+        print('Resampled dataset shape %s' % Counter(y_res))
+    return df_resampled
+
+########################################################################################################################
+"""
+Link: https://imbalanced-learn.org/en/stable/generated/imblearn.under_sampling.TomekLinks.html
+"""
+from imblearn.under_sampling import TomekLinks # doctest: +NORMALIZE_WHITESPACE
+
+def undersample_Tomeks_Link(df, debug=True):
+    X = df.values[:, :-1]
+    y = df.values[:, -1].astype(int)
+    if debug:
+        print('Original dataset shape %s' % Counter(y))
+    tl = TomekLinks()
+    X_res, y_res = tl.fit_resample(X, y)
+    df_resampled = pd.DataFrame(X_res, columns=df.columns[:-1])
+    df_resampled.insert(len(df_resampled.columns), df.columns[-1], y_res)
+    if debug:
+        print('Resampled dataset shape %s' % Counter(y_res))
+    return df_resampled
+
+########################################################################################################################
+"""
+Link: https://imbalanced-learn.readthedocs.io/en/stable/generated/imblearn.under_sampling.RandomUnderSampler.html
+"""
+from imblearn.under_sampling import RandomUnderSampler # doctest: +NORMALIZE_WHITESPACE
+from collections import Counter
+
+def undersample_Random(df, debug=True):
+    X = df.values[:,:-1]
+    y = df.values[:, -1].astype(int)
+    if debug:
+        print('Original dataset shape %s' % Counter(y))
+    rus = RandomUnderSampler(random_state=0)
+    X_res, y_res = rus.fit_resample(X, y)
+    df_resampled = pd.DataFrame(X_res, columns=df.columns[:-1])
+    df_resampled.insert(len(df_resampled.columns), df.columns[-1], y_res)
+    if debug:
+        print('Resampled dataset shape %s' % Counter(y_res))
+    return df_resampled
 
 ########################################################################################################################
 #IGNORE THIS
+"""
 init_data = pd.read_csv('notebooks/nan_data.csv')
 df = treate_missing_values(init_data, action="impute")
 outliers_position = treate_outliers(df, action="parallel")
 print(outliers_position)
+"""
+thyroids = pd.read_csv('notebooks/Thyroids.csv')
+
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from imblearn.metrics import classification_report_imbalanced
+
+thyroids = get_PCA_from_df(thyroids, 40)
+
+
+X = thyroids.values[:,:-1]
+y = thyroids.values[:,-1].astype(int)
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
+
+thyroids_train = pd.DataFrame(X_train, columns=thyroids.columns[:-1])
+thyroids_train.insert(len(thyroids_train.columns), thyroids.columns[-1], y_train)
+
+thyroids_oversampled = oversample_SMOTE(thyroids_train)
+thyroids_oversampled_undersampled = undersample_NearMiss(thyroids_oversampled)
+
+rf_clasifier = RandomForestClassifier(n_estimators=100, random_state=0)
+rf_clasifier.fit(thyroids_oversampled_undersampled.values[:,:-1], thyroids_oversampled_undersampled.values[:,-1])
+
+
+print(classification_report_imbalanced(y_test, rf_clasifier.predict(X_test), digits=4))
+
 ########################################################################################################################
