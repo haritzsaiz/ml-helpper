@@ -63,6 +63,32 @@ DataChecking.missig_values(nan_df, action="impute", debug=True)
 print(len(nan_df.values[:,:]))
 ```
 
+Missing Values: Imputar NaN usando la mediana
+
+```python
+import pandas as pd
+from Preprocessing.datachecking import DataChecking
+nan_df = pd.read_csv("notebooks/nan_data.csv")
+
+# Imputar Missing Values. Modifica directamente la variable nan_df
+print(len(nan_df.values[:,:]))
+DataChecking.missig_values(nan_df, action="impute", debug=True, imputer="median")
+print(len(nan_df.values[:,:]))
+```
+
+Missing Values: Imputar NaN usando una constante (por ejemplo 100)
+
+```python
+import pandas as pd
+from Preprocessing.datachecking import DataChecking
+nan_df = pd.read_csv("notebooks/nan_data.csv")
+
+# Imputar Missing Values. Modifica directamente la variable nan_df
+print(len(nan_df.values[:,:]))
+DataChecking.missig_values(nan_df, action="impute", debug=True, imputer="constant", fill_value=100)
+print(len(nan_df.values[:,:]))
+```
+
 Outliers: Tratar individualmente
 
 ```python
@@ -136,7 +162,7 @@ import pandas as pd
 from Preprocessing.featureselection import FeatureSelection
 
 import pandas as pd
-df = pd.read_csv("../notebooks/iris_data.csv")
+df = pd.read_csv("../notebooks/iris_data.csv")  
 
 selected_features = FeatureSelection.select_features(df)
 print(selected_features)

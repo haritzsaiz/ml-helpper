@@ -9,9 +9,10 @@ class DataChecking():
     ALERT = IT MODIFIES THE DF argument (it may drop some rows). It only find NaN values. It wont Drop Nulls
 
     action{remove|impute}
+    imputer{mean|median|most_frequent|constant}
     """
     @staticmethod
-    def missig_values(df, action="remove", debug=True):
+    def missig_values(df, action="remove", debug=True, imputer="mean", fill_value=None):
         if debug:
             print("DEBUG - Pre action: Variable Count")
             print(df.count())
@@ -24,7 +25,7 @@ class DataChecking():
             # Cambia las categorias por numeros
             for i in range(len(categories)):
                 df[df.columns[-1]].replace(categories[i], i, inplace=True)
-            imp = SimpleImputer(strategy='mean')
+            imp = SimpleImputer(strategy=imputer, fill_value=fill_value)
             df = pd.DataFrame(data=imp.fit_transform(imp.fit_transform(df)))
             # Cambia numeros por las categorias
             df.columns = columns
