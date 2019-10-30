@@ -33,7 +33,7 @@ El paquete ```Preprocessing``` tiene estructurados cada uno de las funciones de 
 
 ### ```Preprocessing\datachecking.py```
 
-Missing Vaues: Borrar NaN
+Missing Values: Borrar NaN
 
 ```python
 import pandas as pd
@@ -47,7 +47,7 @@ print(len(nan_df.values[:,:]))
 
 ```
 
-Missing Vaues: Imputar NaN
+Missing Values: Imputar NaN
 
 ```python
 import pandas as pd
@@ -150,7 +150,8 @@ print(df_pca)
 ```
 
 Obtener TODOS los score por cada 2 variables en el DataFrame.
-**Atencion**: Utiliza la funcion ```Util.automatic_scoring```. ```automatic_scoring``` utiliza RandomForest. (Cambiar ```automatic_scoring``` si se quiere utilizar otro clasificador)
+
+**Atencion**: La funcion ```get_score_2_features_subset``` utiliza ```Util.automatic_scoring```. ```automatic_scoring``` utiliza RandomForest. (Cambiar ```automatic_scoring``` si se quiere utilizar otro clasificador)
 ```python
 import pandas as pd
 from Preprocessing.featureselection import FeatureSelection
