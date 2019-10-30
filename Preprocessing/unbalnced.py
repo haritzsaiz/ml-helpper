@@ -38,12 +38,12 @@ class Unbalanced():
         Link: https://imbalanced-learn.readthedocs.io/en/stable/generated/imblearn.over_sampling.SMOTE.html
         """
         @staticmethod
-        def SMOTE(df, debug=True):
+        def SMOTE(df, debug=True, k=5):
             X = df.values[:, :-1]
             y = df.values[:, -1].astype(int)
             if debug:
                 print('SMOTE: Original dataset shape %s' % Counter(y))
-            sm = SMOTE(random_state=0)
+            sm = SMOTE(random_state=0, k_neighbors=k)
             X_res, y_res = sm.fit_resample(X, y)
             df_resampled = pd.DataFrame(X_res, columns=df.columns[:-1])
             df_resampled.insert(len(df_resampled.columns), df.columns[-1], y_res)
@@ -51,12 +51,12 @@ class Unbalanced():
                 print('SMOTE: Resampled dataset shape %s' % Counter(y_res))
             return df_resampled
         ###########################################################################################################
-        def ADASYN(df, debug=True):
+        def ADASYN(df, debug=True, k=5):
             X = df.values[:, :-1]
             y = df.values[:, -1].astype(int)
             if debug:
                 print('ADASYN: Original dataset shape %s' % Counter(y))
-            ada = ADASYN(random_state=0)
+            ada = ADASYN(random_state=0,n_neighbors=5)
             X_res, y_res = ada.fit_resample(X, y)
             df_resampled = pd.DataFrame(X_res, columns=df.columns[:-1])
             df_resampled.insert(len(df_resampled.columns), df.columns[-1], y_res)

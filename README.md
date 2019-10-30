@@ -211,7 +211,7 @@ print(scores)
 
 #### OverSampling
 
-Hace oversampling con SMOTE
+Hace oversampling con SMOTE (por defecto usa k=5)
 
 ```python
 import pandas as pd
@@ -219,15 +219,18 @@ from Preprocessing.unbalnced import Unbalanced
 
 df = pd.read_csv("notebooks/Thyroids.csv")
 df_oversampled = Unbalanced.OverSampling.SMOTE(df)
+#df_oversampled = Unbalanced.OverSampling.SMOTE(df, k=5)
+
 ```
 
-Hace oversampling con ADASYN
+Hace oversampling con ADASYN (por defecto usa k=5) 
 ```python
 import pandas as pd
 from Preprocessing.unbalnced import Unbalanced
 
 df = pd.read_csv("notebooks/Thyroids.csv")
 df_oversampled = Unbalanced.OverSampling.ADASYN(df)
+#df_oversampled = Unbalanced.OverSampling.ADASYN(df, k=5)
 ```
 
 Hace oversampling con Random
@@ -239,7 +242,7 @@ df = pd.read_csv("notebooks/Thyroids.csv")
 df_oversampled = Unbalanced.OverSampling.Random(df)
 ```
 
-Hace oversampling con Borderline SMOTE version 1
+Hace oversampling con Borderline SMOTE version 1 (por defecto usa k=5)
 ```python
 import pandas as pd
 from Preprocessing.unbalnced import Unbalanced
@@ -247,6 +250,7 @@ from Preprocessing.unbalnced import Unbalanced
 df = pd.read_csv("notebooks/Thyroids.csv")
 #Borderline_SMOTE tiene 2 versiones: variant=1 y varaint=2
 df_ovesampled = Unbalanced.OverSampling.Borderline_SMOTE(df, variant=1)
+#df_ovesampled = Unbalanced.OverSampling.Borderline_SMOTE(df, variant=1, k=5)
 ```
 
 
