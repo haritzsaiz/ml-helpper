@@ -320,3 +320,5 @@ df = pd.read_csv("notebooks/Thyroids.csv")
 df_ovesampled = Unbalanced.OverSampling.SMOTE(df)
 df_ovesampled_undersampled = Unbalanced.UnderSampling.Tomeks_Link(df_ovesampled)
 ```
+
+[![Analytics](https://ga-beacon.appspot.com/UA-151909684-1/emailveselin)](beacon)
